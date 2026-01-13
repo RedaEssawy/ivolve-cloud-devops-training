@@ -1,0 +1,10 @@
+# docker spring app
+docker/Spring_Boot_with_Java/Docker-1/target/
+docker/Spring_Boot_with_Java/Docker-1/*.class
+docker/Spring_Boot_with_Java/Docker-1/*.jar
+docker/Spring_Boot_with_Java/.idea/
+docker/Spring_Boot_with_Java/Docker-1/.vscode/
+docker/Spring_Boot_with_Java/Docker-1/logs/
+docker/Spring_Boot_with_Java/Docker-1/*.log
+docker/Spring_Boot_with_Java/Docker-1/.env
+docker/Spring_Boot_with_Java/Docker-1/application.properties
