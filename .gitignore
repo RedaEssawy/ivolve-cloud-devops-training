@@ -38,3 +38,13 @@ docker/lab6/Docker-1/logs/
 docker/lab6/Docker-1/*.log
 docker/lab6/Docker-1/.env
 docker/lab6/Docker-1/application.properties
+
+# lab7
+docker/lab7/Docker-1/target/
+docker/lab7/Docker-1/*.jar
+docker/lab7/.idea/
+docker/lab7/Docker-1/.vscode/
+docker/lab7/Docker-1/logs/
+docker/lab7/Docker-1/*.log
+docker/lab7/Docker-1/.env
+docker/lab7/Docker-1/application.properties
