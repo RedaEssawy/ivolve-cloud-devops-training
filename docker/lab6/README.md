@@ -35,6 +35,9 @@
 # $ docker build -t lab6_iii .
 ![Alt Text](assets/images/lab6_iii_container.png)
 
+# the lab6_iii container
+![Alt Text](assets/images/lab6_iii_container.png)
+
 # test the lab6_iii container on 8094 port on the browser
 ![Alt Text](assets/images/lab6_iii_test.png)
 
