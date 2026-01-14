@@ -1,3 +1,13 @@
+# spring boot with full source code
+docker/Multi_Stage_Nodejs_app/Docker-1/target/
+docker/Multi_Stage_Nodejs_app/Docker-1/*.jar
+docker/Multi_Stage_Nodejs_app/.idea/
+docker/Multi_Stage_Nodejs_app/Docker-1/.vscode/
+docker/Multi_Stage_Nodejs_app/Docker-1/logs/
+docker/Multi_Stage_Nodejs_app/Docker-1/*.log
+docker/Multi_Stage_Nodejs_app/Docker-1/.env
+docker/Multi_Stage_Nodejs_app/Docker-1/application.properties
+
 # docker spring app
 docker/Spring_Boot_with_Java/Docker-1/target/
 docker/Spring_Boot_with_Java/Docker-1/*.class
@@ -8,3 +18,14 @@ docker/Spring_Boot_with_Java/Docker-1/logs/
 docker/Spring_Boot_with_Java/Docker-1/*.log
 docker/Spring_Boot_with_Java/Docker-1/.env
 docker/Spring_Boot_with_Java/Docker-1/application.properties
+
+# spring boot with full source code
+docker/Spring_Boot_full_source_code_lab3/Docker-1/target/
+docker/Spring_Boot_full_source_code_lab3/Docker-1/*.jar
+docker/Spring_Boot_full_source_code_lab3/.idea/
+docker/Spring_Boot_full_source_code_lab3/Docker-1/.vscode/
+docker/Spring_Boot_full_source_code_lab3/Docker-1/logs/
+docker/Spring_Boot_full_source_code_lab3/Docker-1/*.log
+docker/Spring_Boot_full_source_code_lab3/Docker-1/.env
+docker/Spring_Boot_full_source_code_lab3/Docker-1/application.properties
+
