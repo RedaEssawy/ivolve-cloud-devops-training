@@ -48,3 +48,24 @@ docker/lab7/Docker-1/logs/
 docker/lab7/Docker-1/*.log
 docker/lab7/Docker-1/.env
 docker/lab7/Docker-1/application.properties
+
+
+# lab8
+docker/lab8/Docker-1/target/
+docker/lab8/Docker-1/*.jar
+docker/lab8/.idea/
+docker/lab8/Docker-1/.vscode/
+docker/lab8/Docker-1/logs/
+docker/lab8/Docker-1/*.log
+docker/lab8/Docker-1/.env
+docker/lab8/Docker-1/application.properties
+
+# lab9
+docker/lab9/Docker-1/target/
+docker/lab9/Docker-1/*.jar
+docker/lab9/.idea/
+docker/lab9/Docker-1/.vscode/
+docker/lab9/Docker-1/logs/
+docker/lab9/Docker-1/*.log
+docker/lab9/Docker-1/.env
+docker/lab9/Docker-1/application.properties
