@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+    web-app:
+        container_name: web-app
+        build: .
+        ports:
+            - target: 3000
+              published: 3000
+        environment:
+              DB_HOST: "db-service"
+              DB_USER: "db-user"
+              DB_PASSWORD: "user1234"
+    db-service:
+        container_name: "ivolve"
+        image: mysql:oraclelinux9
+        environment:
+              MYSQL_ROOT_PASSWORD: "user1234"
+              MYSQL_DATABASE: "ivolve"
+              MYSQL_USER: "db-user"
+              MYSQL_PASSWORD: "user1234"
+        volumes:
+            - db-data:/var/lib/mysql
+
+
+volumes:
+    db-data:
