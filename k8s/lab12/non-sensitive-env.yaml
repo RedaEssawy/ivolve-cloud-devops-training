@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  DB_HOST: dbhost
+  DB_USER: dbuser
+kind: ConfigMap
+metadata:
+  name: non-sensitive-env

@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  DB_PASSWORD: ZGJwYXNzd29yZA==
+  MYSQL_ROOT_PASSWORD: bXlzcWxyb290cGFzc3dvcmQ=
+kind: Secret
+metadata:
+  name: sensitive-var
