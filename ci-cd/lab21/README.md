@@ -1,136 +1,157 @@
 # Objective
-Configure Jenkins with role-based authorization to control user access to jobs, views, and administrative functions based on user roles.
+Configure Jenkins with role-based authorization to control user access to jobs, views, and administrative functions based on assigned roles.
+
+---
 
 # Concepts Covered
 - Jenkins security realm configuration
 - Role-based authorization strategy
 - Matrix-based security
 - User and group management
-- Project-based matrix authorization\
+- Project-based matrix authorization
+
+---
 
 # Prerequisites
 - Jenkins installed and accessible
 - Admin access to Jenkins
-- Role-based Authorization Plugin installed
+- Role-based Authorization Strategy plugin installed
 - Basic understanding of Jenkins security
+
+---
 
 # Steps
 
 ## Step 1: Install Required Plugins
 
-First, ensure you have the necessary plugins installed:
+Ensure the required plugins are installed.
 
+### Web UI Actions
 1. Go to **Manage Jenkins → Manage Plugins**
+2. Open the **Available** tab
+3. Search for and install:
+   - **Role-based Authorization Strategy**
+   - **Matrix Authorization Strategy Plugin** (if not already installed)
+4. Restart Jenkins if prompted
 
-2. In the **Available** tab, search for and install:
+### Screenshots
+![Role-based plugin](assets/images/role-based-plugin.png)
+![Plugin installed](assets/images/role-based-installed.png)
+![Restart Jenkins](assets/images/restart-jenkins.png)
 
-    - **Role-based Authorization Strategy**
+---
 
-      [Alt Text](assets/images/role-based-plugin.png)
-      [Alt Text](assets/images/role-based-installed.png)
+## Step 2: Enable Role-based Authorization Strategy
 
-    - **Matrix Authorization Strategy Plugin** (if not included)
-
-3. Restart Jenkins if prompted
-
-    [Alt Text](assets/images/restart-jenkins.png)
-
-## Step 2: Enable Role-based Strategy
-
-<pre>
-```# Access Jenkins via browser (usually http://localhost:8080)
-# Or configure via Jenkins CLI if available```
-</pre>
-
-Web UI Steps:
-
+### Web UI Actions
 1. Go to **Manage Jenkins → Configure Global Security**
 2. Under **Authorization**, select **Role-Based Strategy**
 3. Click **Save**
 
+> 💡 This switches Jenkins authorization from global matrix to role-based access control.
+
+---
+
 ## Step 3: Create Users
 
-Web UI Method:
+### Web UI Actions
 1. Go to **Manage Jenkins → Manage Users**
 2. Click **Create User**
-3. Create:
-    - **Username**: `user1`
-    - **Password**: `user1pass`
-    - **Full name**: `User One`
-    - **Email**: `user1@example.com`
-4. Repeat for `user2` with password `user2pass`
+3. Create the following users:
 
-     [Alt Text](assets/images/user1&user2.png)
+**User 1**
+- Username: `user1`
+- Password: `user1pass`
+- Full name: `User One`
+- Email: `user1@example.com`
+
+**User 2**
+- Username: `user2`
+- Password: `user2pass`
+- Full name: `User Two`
+- Email: `user2@example.com`
+
+### Screenshot
+![Users created](assets/images/user1-user2.png)
+
+---
 
 ## Step 4: Configure Global Roles
 
-Go to **Manage Jenkins → Manage and Assign Roles → Manage Roles**
-**Global Roles:**
+### Web UI Actions
+1. Go to **Manage Jenkins → Manage and Assign Roles → Manage Roles**
+2. Under **Global Roles**, click **Add Role**
 
-1. Click **Add Role**
-2. Create roles with the following permissions:
-
-**admin Role:**
+### Admin Role
 - Role Name: `admin`
 - Pattern: `.*`
-- Permissions: Select **All** (or at minimum):
-    - Overall: Administer
-    - Overall: Read
-    - Agent: Create, Delete, Configure, Connect, Disconnect
-    - Job: Create, Delete, Configure, Build, Cancel, Read
-    - Run: Delete, Update
-    - View: Create, Delete, Configure, Read
-    - SCM: Tag
+- Permissions:
+  - Overall: Administer, Read
+  - Agent: Create, Delete, Configure, Connect, Disconnect
+  - Job: Create, Delete, Configure, Build, Cancel, Read
+  - Run: Delete, Update
+  - View: Create, Delete, Configure, Read
+  - SCM: Tag
 
-**read-only Role:**
+### Read-only Role
 - Role Name: `read-only`
 - Pattern: `.*`
 - Permissions:
-    - Overall: Read
-    - Job: Read 
-    - View: Read 
-    - Metrics: View
+  - Overall: Read
+  - Job: Read
+  - View: Read
+  - Metrics: View
 
-    [Alt Text](assets/images/create-roles.png)
+### Screenshot
+![Create roles](assets/images/create-roles.png)
+
+---
 
 ## Step 5: Assign Global Roles to Users
 
-Go to **Manage Jenkins → Manage and Assign Roles → Assign Roles**
-
-**Global Roles Assignment:**
-
-1. Find the table with users/groups
-2. Assign roles:
-    - `user1`: Check **admin** role
-    - `user2`: Check **read-only** role
-    - `authenticated`: Check **read-only** role (for all logged-in users)
-    - `anonymous`: Leave empty or assign minimal read if needed
+### Web UI Actions
+1. Go to **Manage Jenkins → Manage and Assign Roles → Assign Roles**
+2. Assign roles as follows:
+   - `user1` → **admin**
+   - `user2` → **read-only**
+   - `authenticated` → **read-only**
+   - `anonymous` → No permissions (or minimal read if required)
 3. Click **Save**
 
-     [Alt Text](assets/images/assign-users.png)
+### Screenshot
+![Assign users](assets/images/assign-users.png)
+
+---
 
 ## Step 6: Test Role Assignments
 
-Log out and test each user:
+### Test as user1 (Admin)
+Verify that user1 can:
+- Access **Manage Jenkins**
+- Create, configure, and delete jobs
+- Modify system configuration
 
-**Test as user1 (admin):**
+![Admin test](assets/images/user1-test.png)
 
-1. Log in as user1/user1pass
-2. Verify you can:
-    - Access Manage Jenkins
-    - Create new jobs
-    - Delete jobs
-    - Configure system settings
+---
 
-    [Alt Text](assets/images/user1-test.png)
+### Test as user2 (Read-only)
+Verify that user2 can:
+- View jobs
+- Cannot create or configure jobs
+- Cannot access **Manage Jenkins**
 
-**Test as user2 (read-only):**
+![Read-only test](assets/images/user2-test.png)
 
-1. Log in as user2/user2pass
-2. Verify you can:
-    - View jobs (if any exist)
-    - Cannot create new jobs
-    - Cannot access Manage Jenkins
-    - Cannot configure jobs
+---
 
-    [Alt Text](assets/images/user2-test.png)
+## ✅ Result
+Role-based authorization is successfully configured, enforcing proper access control based on user roles.
+
+---
+
+## 💡 Real-World Use Case
+This setup is commonly used in enterprise Jenkins environments to:
+- Restrict CI/CD configuration access
+- Separate admin and developer responsibilities
+- Improve overall security posture
