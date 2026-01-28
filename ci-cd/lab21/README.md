@@ -25,13 +25,18 @@ First, ensure you have the necessary plugins installed:
 2. In the **Available** tab, search for and install:
 
     - **Role-based Authorization Strategy**
-    [Alt Text](assets/images/role-based-plugin.png)
-    [Alt Text](assets/images/role-based-installed.png)
+
+      [Alt Text](assets/images/role-based-plugin.png)
+      [Alt Text](assets/images/role-based-installed.png)
+
     - **Matrix Authorization Strategy Plugin** (if not included)
 
 3. Restart Jenkins if prompted
-[Alt Text](assets/images/restart-jenkins.png)
+
+    [Alt Text](assets/images/restart-jenkins.png)
+
 ## Step 2: Enable Role-based Strategy
+
 <pre>
 ```# Access Jenkins via browser (usually http://localhost:8080)
 # Or configure via Jenkins CLI if available```
@@ -55,7 +60,7 @@ Web UI Method:
     - **Email**: `user1@example.com`
 4. Repeat for `user2` with password `user2pass`
 
-[Alt Text](assets/images/user1&user2.png)
+     [Alt Text](assets/images/user1&user2.png)
 
 ## Step 4: Configure Global Roles
 
@@ -86,7 +91,7 @@ Go to **Manage Jenkins → Manage and Assign Roles → Manage Roles**
     - View: Read 
     - Metrics: View
 
-[Alt Text](assets/images/create-roles.png)
+    [Alt Text](assets/images/create-roles.png)
 
 ## Step 5: Assign Global Roles to Users
 
@@ -102,7 +107,7 @@ Go to **Manage Jenkins → Manage and Assign Roles → Assign Roles**
     - `anonymous`: Leave empty or assign minimal read if needed
 3. Click **Save**
 
-[Alt Text](assets/images/assign-users.png)
+     [Alt Text](assets/images/assign-users.png)
 
 ## Step 6: Test Role Assignments
 
@@ -117,7 +122,7 @@ Log out and test each user:
     - Delete jobs
     - Configure system settings
 
-[Alt Text](assets/images/user1-test.png)
+    [Alt Text](assets/images/user1-test.png)
 
 **Test as user2 (read-only):**
 
@@ -128,4 +133,4 @@ Log out and test each user:
     - Cannot access Manage Jenkins
     - Cannot configure jobs
 
-[Alt Text](assets/images/user2-test.png)
+    [Alt Text](assets/images/user2-test.png)
