@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+   name: pvc-retain
+   namespace: ivolve
+spec:
+  storageClassName: local
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
