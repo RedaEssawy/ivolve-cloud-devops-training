@@ -72,7 +72,7 @@ Ensure the required plugins are installed.
 - Email: `user2@example.com`
 
 ### Screenshot
-![Users created](assets/images/user1-user2.png)
+![Users created](assets/images/user1&user2.png)
 
 ---
 
