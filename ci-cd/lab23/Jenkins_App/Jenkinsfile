@@ -36,16 +36,7 @@ pipeline{
          }
             }       
 
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerHub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh """
-                      echo $DOCKERHUB_PASSWORD  | docker login -u '$DOCKERHUB_USERNAME' --password-stdin
-                        docker push $IMAGE_NAME:$BUILD_NUMBER
-                    """
-                }
-            }
-        }
+       
         stage('Delete Local Docker Image') {
             steps {
                 sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
