@@ -23,6 +23,7 @@ pipeline{
         }}
         stage('Build Docker Image') {
             steps {
+                dir('ci-cd/lab22/Jenkins_App') {
                 sh "docker build -t $IMAGE_NAME:$BUILD_NUMBER ."
             }
         }
