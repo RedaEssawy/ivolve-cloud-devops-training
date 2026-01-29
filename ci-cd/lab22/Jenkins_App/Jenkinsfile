@@ -45,10 +45,11 @@ pipeline{
         }
         stage('Update Deployment File') {
             steps {
+                dir('ci-cd/lab22/Jenkins_App') {
                 sh """
                     sed -i 's|image: .*|image: $IMAGE_NAME:$BUILD_NUMBER|' $DEPLOYMENT_FILE
                 """
-            }
+            }}
         }
         stage('Deploy to Kubernetes') {
             
