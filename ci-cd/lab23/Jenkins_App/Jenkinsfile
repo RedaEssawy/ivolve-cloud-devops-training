@@ -32,7 +32,7 @@ pipeline{
              script {
                  echo "Scanning Docker image with Trivy..."
 
-                 sh '
+                 sh "
                
 
                    trivy image $IMAGE_NAME:$BUILD_NUMBER \
@@ -40,7 +40,7 @@ pipeline{
                    --timeout 45m \
                    --format html \
                    -o trivy-report.html 
-                 '
+                 "
 
                 
              }
