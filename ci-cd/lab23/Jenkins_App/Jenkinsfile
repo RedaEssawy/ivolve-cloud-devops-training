@@ -6,6 +6,8 @@ pipeline{
         IMAGE_NAME="redaeid/kubernets-app_web-app"
         DEPLOYMENT_FILE="deployment.yaml"
         Docker_Credentials_ID='dockerHub-credentials'
+        API_SERVER='APIServer'
+        SERVICEACCOUNT_TOKEN='ServiceAccount-Token'
     }
 
     stages {
@@ -20,7 +22,7 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
-                buildAndPushImage(IMAGE_NAME,Docker_Credentials_ID)
+                buildAndPushImage($IMAGE_NAME,$Docker_Credentials_ID)
             }
         }}
         stage('Docker Image Security Scan') {
@@ -53,16 +55,9 @@ pipeline{
         stage('Deploy to Kubernetes') {
             
             steps {
-                withCredentials([
-                string(credentialsId: 'APIServer', variable: 'API_SERVER'),
-                string(credentialsId: 'ServiceAccount-Token', variable: 'KUBE_TOKEN')
-
-            ]){
-            dir('ci-cd/lab22/Jenkins_App')
-            {
-                sh "kubectl apply -f $DEPLOYMENT_FILE --server=$API_SERVER --token=$KUBE_TOKEN --insecure-skip-tls-verify=true"
+                dir('ci-cd/lab22/Jenkins_App') {
+                deployOnK8S($API_SERVER,$SERVICEACCOUNT_TOKEN)
             }
-        }
         }
         }
         
