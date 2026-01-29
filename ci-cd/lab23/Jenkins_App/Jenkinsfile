@@ -119,9 +119,16 @@ pipeline{
          
     }
     post {
-        always {
-            echo "Pipeline completed."
-        }
+         always {
+        publishHTML([
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: '.',
+            reportFiles: 'trivy-report.html',
+            reportName: 'Trivy Security Scan Report'
+        ])
+    }
         success{
             echo "Pipeline succeeded."
         }
