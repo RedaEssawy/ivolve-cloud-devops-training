@@ -13,7 +13,7 @@ pipeline{
     stages {
         stage('Run Unit Tests') {
             steps {
-                dir('ci-cd/lab22/Jenkins_App') {
+                dir("ci-cd/lab23/Jenkins_App") {
                     buildApp()
                 }
             }
@@ -21,7 +21,7 @@ pipeline{
        
         stage('Build Docker Image') {
             steps {
-                dir('ci-cd/lab22/Jenkins_App') {
+                dir("ci-cd/lab23/Jenkins_App") {
                 buildAndPushImage(IMAGE_NAME,Docker_Credentials_ID)
             }
         }}
@@ -30,10 +30,7 @@ pipeline{
              script {
                  echo "Scanning Docker image with Trivy..."
 
-                 sh "trivy image $IMAGE_NAME:$BUILD_NUMBER || true"
-                 
-
-                
+                 sh "trivy image $IMAGE_NAME:$BUILD_NUMBER || true"   
              }
          }
             }       
@@ -44,19 +41,12 @@ pipeline{
                 sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
             }
         }
-        stage('Update Deployment File') {
-            steps {
-                dir('ci-cd/lab22/Jenkins_App') {
-                sh """
-                    sed -i 's|image: .*|image: $IMAGE_NAME:$BUILD_NUMBER|' $DEPLOYMENT_FILE
-                """
-            }}
-        }
+       
         stage('Deploy to Kubernetes') {
             
             steps {
-                dir('ci-cd/lab22/Jenkins_App') {
-                deployOnK8S(API_SERVER,SERVICEACCOUNT_TOKEN)
+                dir('ci-cd/lab23/Jenkins_App') {
+                deployOnK8S(API_SERVER,SERVICEACCOUNT_TOKEN, IMAGE_NAME,DEPLOYMENT_FILE)
             }
         }
         }
@@ -73,6 +63,7 @@ pipeline{
         }
         failure{
             echo "Pipeline failed."
+            sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
         }
     }
 
