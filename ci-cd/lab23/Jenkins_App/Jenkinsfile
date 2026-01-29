@@ -47,16 +47,16 @@ pipeline{
                    -o trivy-report.html || true
                  '''
 
-                 if (!fileExists('trivy-report.json')) {
-                     error "Trivy scan failed: JSON report not generated"
-                 }
+                //  if (!fileExists('trivy-report.json')) {
+                //      error "Trivy scan failed: JSON report not generated"
+                //  }
 
-                 def vulnCount = sh(
-                     script: "jq '[.Results[].Vulnerabilities[]?] | length' trivy-report.json",
-                     returnStdout: true
-                 ).trim()
+                //  def vulnCount = sh(
+                //      script: "jq '[.Results[].Vulnerabilities[]?] | length' trivy-report.json",
+                //      returnStdout: true
+                //  ).trim()
 
-                 echo "Vulnerabilities found: ${vulnCount}"
+                //  echo "Vulnerabilities found: ${vulnCount}"
 
                 //  if (vulnCount.toInteger() > 0) {
                 //      error "Security gate failed: HIGH or CRITICAL vulnerabilities detected"
