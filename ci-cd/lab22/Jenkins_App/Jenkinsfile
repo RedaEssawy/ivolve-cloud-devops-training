@@ -58,12 +58,14 @@ pipeline{
                 string(credentialsId: 'APIServe', variable: 'API_SERVER'),
                 string(credentialsId: 'ServiceAccount-Token', variable: 'KUBE_TOKEN')
 
-            ])
+            ]){
             dir('ci-cd/lab22/Jenkins_App')
             {
                 sh "kubectl apply -f $DEPLOYMENT_FILE --server=$API_SERVER --token=$KUBE_TOKEN --insecure-skip-tls-verify=true"
             }
-        }}
+        }
+        }
+        }
         
          
     }
