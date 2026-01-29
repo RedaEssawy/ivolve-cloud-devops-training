@@ -9,11 +9,15 @@ pipeline{
     stages {
         stage('Run Unit Tests') {
             steps {
-                sh  'mvn test'
+                dir('ci-cd/lab22/Jenkins_App') {
+                    sh 'mvn test'
+                }
             }
         }
         stage('Build Application') {
+
             steps {
+                dir('ci-cd/lab22/Jenkins_App') {
                 sh 'mvn package'
             }
         }
