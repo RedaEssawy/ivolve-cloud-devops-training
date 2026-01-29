@@ -22,7 +22,7 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
-                buildAndPushImage($IMAGE_NAME,$Docker_Credentials_ID)
+                buildAndPushImage(IMAGE_NAME,Docker_Credentials_ID)
             }
         }}
         stage('Docker Image Security Scan') {
@@ -56,7 +56,7 @@ pipeline{
             
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
-                deployOnK8S($API_SERVER,$SERVICEACCOUNT_TOKEN)
+                deployOnK8S(API_SERVER,SERVICEACCOUNT_TOKEN)
             }
         }
         }
