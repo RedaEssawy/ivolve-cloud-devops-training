@@ -30,9 +30,51 @@ pipeline{
         stage('Scan Docker Image') {
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
-                sh "trivy image $IMAGE_NAME:$BUILD_NUMBER > trivy-report.txt || true"
+                 script {
+            echo "Scanning Docker image with Trivy..."
+
+            // Run Trivy and ALWAYS generate reports
+            sh """
+                trivy image $IMAGE_NAME:$BUILD_NUMBER \
+                --severity HIGH,CRITICAL \
+                --format json \
+                -o trivy-report.json || true
+
+                trivy image $IMAGE_NAME:$BUILD_NUMBER \
+                --format template \
+                --template "@contrib/html.tpl" \
+                -o trivy-report.html || true
+            """
+
+            // Count vulnerabilities
+            def vulnCount = sh(
+                script: """
+                jq '[.Results[].Vulnerabilities[]?] | length' trivy-report.json
+                """,
+                returnStdout: true
+            ).trim()
+
+            echo "Vulnerabilities found: ${vulnCount}"
+
+            if (vulnCount.toInteger() > 0) {
+                error "Security scan failed: HIGH or CRITICAL vulnerabilities detected"
             }
-        }}
+            }
+            
+            
+            }
+        }    
+            }
+    
+        
+        
+
+        
+        
+       
+    
+
+
         
         
         stage('Push Docker Image') {
