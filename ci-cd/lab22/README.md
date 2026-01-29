@@ -1,4 +1,4 @@
-<!-- # Objective
+# Objective
 Create a Jenkins pipeline that automates the complete CI/CD workflow for a Java application: build, test, containerize, push to registry, and deploy to Kubernetes.
 
 # Concepts Covered
@@ -115,6 +115,138 @@ In the job configuration:
 Create a `Jenkinsfile` in your repository root:
 
 <pre>
-touch Jenkinsfile
+Touch Jenkinsfile
 </pre>
- -->
+Put the following contents in it:
+<pre>
+pipeline{
+    agent any
+
+    environment {
+        IMAGE_NAME="redaeid/kubernets-app_web-app"
+        DEPLOYMENT_FILE="deployment.yaml"
+    }
+
+    stages {
+        stage('Run Unit Tests') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Build Application') {
+
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh 'mvn package'
+            }
+        }}
+        stage('Build Docker Image') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh "docker build -t $IMAGE_NAME:$BUILD_NUMBER ."
+            }
+        }}
+        
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerHub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh """
+                      echo $DOCKERHUB_PASSWORD  | docker login -u '$DOCKERHUB_USERNAME' --password-stdin
+                        docker push $IMAGE_NAME:$BUILD_NUMBER
+                    """
+                }
+            }
+        }
+        stage('Delete Local Docker Image') {
+            steps {
+                sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
+            }
+        }
+        stage('Update Deployment File') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh """
+                    sed -i 's|image: .*|image: $IMAGE_NAME:$BUILD_NUMBER|' $DEPLOYMENT_FILE
+                """
+            }}
+        }
+        stage('Deploy to Kubernetes') {
+            
+            steps {
+                withCredentials([
+                string(credentialsId: 'APIServer', variable: 'API_SERVER'),
+                string(credentialsId: 'ServiceAccount-Token', variable: 'KUBE_TOKEN')
+
+            ]){
+            dir('ci-cd/lab22/Jenkins_App')
+            {
+                sh "kubectl apply -f $DEPLOYMENT_FILE --server=$API_SERVER --token=$KUBE_TOKEN --insecure-skip-tls-verify=true"
+            }
+        }
+        }
+        }
+        
+         
+    }
+    post {
+        always {
+            echo "Pipeline completed."
+        }
+        success{
+            echo "Pipeline succeeded."
+        }
+        failure{
+            echo "Pipeline failed."
+        }
+    }
+
+
+}
+</pre>
+
+## Step 7: Create deployment.yaml File (Alternative)
+<pre>
+Touch deployment.yaml
+</pre>
+Put the following contents in it:
+<pre>
+<pre>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-deployment
+  name: app-deployment
+  namespace: ivolve
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-deployment
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app-deployment
+    spec:
+      containers:
+      - image: redaeid/kubernets-app_web-app
+        name: kubernets-app-web-app-gks5b
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        imagePullPolicy: Always
+        resources: {}
+status: {}
+
+</pre>
+
+## Step 8: Run the Pipeline
+
+1. Click Build Now on your pipeline job
+2. Watch the pipeline progress in Blue Ocean or classic view
+3. Check each stage output
+
+![Alt Text](assets/images/successed-pipeline.png)
