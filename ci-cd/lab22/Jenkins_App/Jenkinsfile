@@ -55,7 +55,7 @@ pipeline{
             
             steps {
                 withCredentials([
-                string(credentialsId: 'APIServe', variable: 'API_SERVER'),
+                string(credentialsId: 'APIServer', variable: 'API_SERVER'),
                 string(credentialsId: 'ServiceAccount-Token', variable: 'KUBE_TOKEN')
 
             ]){
