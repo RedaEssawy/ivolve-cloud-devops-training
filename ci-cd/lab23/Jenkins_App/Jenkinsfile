@@ -10,17 +10,11 @@ pipeline{
         stage('Run Unit Tests') {
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
-                    sh 'mvn test'
+                    buildApp()
                 }
             }
         }
-        stage('Build Application') {
-
-            steps {
-                dir('ci-cd/lab22/Jenkins_App') {
-                sh 'mvn package'
-            }
-        }}
+       
         stage('Build Docker Image') {
             steps {
                 dir('ci-cd/lab22/Jenkins_App') {
