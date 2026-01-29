@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-deployment
+  name: app-deployment
+  namespace: ivolve
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-deployment
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app-deployment
+    spec:
+      containers:
+      - image: redaeid/kubernets-app_web-app
+        name: kubernets-app-web-app-gks5b
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        imagePullPolicy: Always
+        resources: {}
+status: {}

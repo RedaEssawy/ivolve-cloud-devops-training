@@ -1,0 +1,92 @@
+pipeline{
+    agent any
+
+    environment {
+        IMAGE_NAME="redaeid/kubernets-app_web-app"
+        DEPLOYMENT_FILE="deployment.yaml"
+    }
+
+    stages {
+        stage('Run Unit Tests') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Build Application') {
+
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh 'mvn package'
+            }
+        }}
+        stage('Build Docker Image') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh "docker build -t $IMAGE_NAME:$BUILD_NUMBER ."
+            }
+        }}
+        stage('Scan Docker Image') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh "trivy image $IMAGE_NAME:$BUILD_NUMBER "
+            }
+        }}
+        
+        
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerHub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh """
+                      echo $DOCKERHUB_PASSWORD  | docker login -u '$DOCKERHUB_USERNAME' --password-stdin
+                        docker push $IMAGE_NAME:$BUILD_NUMBER
+                    """
+                }
+            }
+        }
+        stage('Delete Local Docker Image') {
+            steps {
+                sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
+            }
+        }
+        stage('Update Deployment File') {
+            steps {
+                dir('ci-cd/lab22/Jenkins_App') {
+                sh """
+                    sed -i 's|image: .*|image: $IMAGE_NAME:$BUILD_NUMBER|' $DEPLOYMENT_FILE
+                """
+            }}
+        }
+        stage('Deploy to Kubernetes') {
+            
+            steps {
+                withCredentials([
+                string(credentialsId: 'APIServer', variable: 'API_SERVER'),
+                string(credentialsId: 'ServiceAccount-Token', variable: 'KUBE_TOKEN')
+
+            ]){
+            dir('ci-cd/lab22/Jenkins_App')
+            {
+                sh "kubectl apply -f $DEPLOYMENT_FILE --server=$API_SERVER --token=$KUBE_TOKEN --insecure-skip-tls-verify=true"
+            }
+        }
+        }
+        }
+        
+         
+    }
+    post {
+        always {
+            echo "Pipeline completed."
+        }
+        success{
+            echo "Pipeline succeeded."
+        }
+        failure{
+            echo "Pipeline failed."
+        }
+    }
+
+
+}
