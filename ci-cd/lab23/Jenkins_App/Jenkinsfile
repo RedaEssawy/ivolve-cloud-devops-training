@@ -21,7 +21,9 @@ pipeline{
             }
         }
         stage("SonarQube Analysis") {
+
             steps {
+                dir("ci-cd/lab23/Jenkins_App") {
                 withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
 
                     withSonarQubeEnv('SonarQube') {
@@ -36,6 +38,7 @@ pipeline{
                 }
                  }
                      }
+                        }
 
 
        
