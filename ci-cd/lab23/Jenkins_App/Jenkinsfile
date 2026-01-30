@@ -6,7 +6,7 @@ pipeline{
     environment {
         IMAGE_NAME="redaeid/kubernets-app_web-app"
         DEPLOYMENT_FILE="deployment.yaml"
-        Docker_Credentials_ID='dockerHub-credentials'
+        DOCKERHUB_CREDENTIALS='dockerHub-credentials'
         API_SERVER='APIServer'
         SERVICEACCOUNT_TOKEN='ServiceAccount-Token'
     }
@@ -23,7 +23,7 @@ pipeline{
         stage('Build and Push Docker Image') {
             steps {
                 dir("ci-cd/lab23/Jenkins_App") {
-                buildAndPushImage(IMAGE_NAME,Docker_Credentials_ID)
+                buildAndPushImage(IMAGE_NAME,DOCKERHUB_CREDENTIALS)
             }
         }}
         stage('Docker Image Security Scan') {
