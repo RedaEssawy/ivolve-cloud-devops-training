@@ -46,7 +46,7 @@ pipeline{
             
             steps {
                 dir('ci-cd/lab23/Jenkins_App') {
-                deployOnK8S(API_SERVER,IMAGE_NAME,DEPLOYMENT_FILE)
+                deployOnK8S(API_SERVER,SERVICEACCOUNT_TOKEN,IMAGE_NAME,DEPLOYMENT_FILE)
             }
         }
         }
