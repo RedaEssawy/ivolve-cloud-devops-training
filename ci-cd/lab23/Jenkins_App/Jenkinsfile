@@ -1,6 +1,7 @@
 @Library('vars') _
 pipeline{
-    agent any
+      agent { label 'ubuntu-agent' }
+
 
     environment {
         IMAGE_NAME="redaeid/kubernets-app_web-app"
@@ -11,7 +12,7 @@ pipeline{
     }
 
     stages {
-        stage('Run Unit Tests') {
+        stage('Test and Build Application') {
             steps {
                 dir("ci-cd/lab23/Jenkins_App") {
                     buildApp()
@@ -19,7 +20,7 @@ pipeline{
             }
         }
        
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 dir("ci-cd/lab23/Jenkins_App") {
                 buildAndPushImage(IMAGE_NAME,Docker_Credentials_ID)
