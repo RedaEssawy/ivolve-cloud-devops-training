@@ -4,6 +4,7 @@ pipeline{
 
 
     environment {
+        APP_NAME="Java-Web-App"
         IMAGE_NAME="redaeid/kubernets-app_web-app"
         DEPLOYMENT_FILE="deployment.yaml"
         DOCKERHUB_CREDENTIALS='dockerHub-credentials'
@@ -19,6 +20,24 @@ pipeline{
                 }
             }
         }
+        stage("SonarQube Analysis") {
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+
+                    withSonarQubeEnv('SonarQube') {
+                       sh """
+                         mvn sonar:sonar \
+                         -Dsonar.projectKey=${APP_NAME} \
+                         -Dsonar.host.url=http://localhost:9000 \
+                         -Dsonar.login=$SONAR_TOKEN
+                       """
+                     }
+
+                }
+                 }
+                     }
+
+
        
         stage('Build and Push Docker Image') {
             steps {
