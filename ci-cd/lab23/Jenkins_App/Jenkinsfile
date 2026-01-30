@@ -20,7 +20,26 @@ pipeline{
                 }
             }
         }
-      
+        stage("SonarQube Analysis") {
+
+            steps {
+                dir("ci-cd/lab23/Jenkins_App") {
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+
+                
+                       sh """
+                         mvn -f ../pom.xml sonar:sonar \
+                         -Dsonar.projectKey=${APP_NAME} \
+                         -Dsonar.host.url=http://localhost:9000 \
+                         -Dsonar.login=$SONAR_TOKEN
+                       """
+                    
+
+                }
+
+                 }
+                     }
+                        }
 
 
        
