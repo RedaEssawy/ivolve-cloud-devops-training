@@ -56,7 +56,7 @@ pipeline{
              script {
                  echo "Scanning Docker image with Trivy..."
 
-                 sh "trivy  --scanners vuln image $IMAGE_NAME:$BUILD_NUMBER  || true"   
+                 sh "trivy  --scanners vuln --skip-version-check image $IMAGE_NAME:$BUILD_NUMBER  || true"   
              }
          }
             }       
