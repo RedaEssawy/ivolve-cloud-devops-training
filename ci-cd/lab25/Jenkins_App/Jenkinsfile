@@ -1,0 +1,97 @@
+@Library('vars') _
+pipeline{
+      agent { label 'ubuntu-agent' }
+
+
+    environment {
+        APP_NAME="Java-Web-App"
+        IMAGE_NAME="redaeid/kubernets-app_web-app"
+        DEPLOYMENT_FILE="deployment.yaml"
+        DOCKERHUB_CREDENTIALS='dockerHub-credentials'
+        API_SERVER='APIServer'
+        SERVICEACCOUNT_TOKEN='ServiceAccount-Token'
+    }
+
+    stages {
+        stage('Test and Build Application') {
+            steps {
+                dir("ci-cd/lab23/Jenkins_App") {
+                    buildApp()
+                }
+            }
+        }
+        stage("SonarQube Analysis") {
+
+            steps {
+                 withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                dir("ci-cd/lab23/Jenkins_App") {
+               
+
+                
+                       sh """
+                         mvn  sonar:sonar \
+                         -Dsonar.projectKey=${APP_NAME} \
+                         -Dsonar.host.url=http://localhost:9000 \
+                         -Dsonar.login=$SONAR_TOKEN
+                       """
+                    
+
+                
+
+                 }
+                     }
+                        }
+                    }
+
+
+       
+        stage('Build and Push Docker Image') {
+            steps {
+                dir("ci-cd/lab23/Jenkins_App") {
+                buildAndPushImage(IMAGE_NAME,DOCKERHUB_CREDENTIALS)
+            }
+        }}
+        stage('Docker Image Security Scan') {
+         steps {
+             script {
+                 echo "Scanning Docker image with Trivy..."
+
+                 sh "trivy  --scanners vuln --skip-version-check image $IMAGE_NAME:$BUILD_NUMBER  || true"   
+             }
+         }
+            }       
+
+       
+        stage('Delete Local Docker Image') {
+            steps {
+                sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER || true"
+            }
+        }
+       
+        stage('Deploy to Kubernetes') {
+            
+            steps {
+                dir('ci-cd/lab23/Jenkins_App') {
+                deployOnK8S(API_SERVER,SERVICEACCOUNT_TOKEN,IMAGE_NAME,DEPLOYMENT_FILE)
+            }
+        }
+        }
+        
+         
+    }
+    post {
+          always {
+            echo "Cleaning up workspace..."
+        
+    }
+        success{
+            echo "Pipeline succeeded."
+        }
+        failure{
+            echo "Pipeline failed."
+           
+        }
+    }
+
+
+}
