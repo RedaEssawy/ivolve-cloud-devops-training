@@ -20,7 +20,7 @@ Implement GitOps workflow using ArgoCD to automatically deploy applications to K
 
 # Steps
 
-## Step 1: Clone Source Code and Prepare Environment
+<!-- ## Step 1: Clone Source Code and Prepare Environment
 <pre>
 ```
 # SSH into Jenkins server or use Jenkins node
@@ -244,4 +244,4 @@ status: {}
 2. Watch the pipeline progress in Blue Ocean or classic view
 3. Check each stage output
 
-![Alt Text](assets/images/successed-pipeline.png)
+![Alt Text](assets/images/successed-pipeline.png) -->
